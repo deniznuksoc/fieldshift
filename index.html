@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#183c31">
+  <meta name="description" content="NASA Earth observations and your local knowledge, together for more resilient crop rotations.">
+  <title>FieldShift — Tarlan için iklim dayanıklılığı</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='13' fill='%23183c31'/%3E%3Cpath d='M11 27c0-10 7-16 19-17-1 12-7 19-17 19m2-2 12-12' fill='none' stroke='%23d2e7a5' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <svg class="icon-library" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M20 4c-9 0-15 4-15 11a5 5 0 0 0 5 5c7 0 11-6 10-16Z"/><path d="M4 21c3-5 7-8 12-11"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol>
+    <symbol id="i-rotate" viewBox="0 0 24 24"><path d="M20 7v5h-5"/><path d="M4 17v-5h5"/><path d="M5.7 9a7 7 0 0 1 11.6-2L20 12"/><path d="M18.3 15a7 7 0 0 1-11.6 2L4 12"/></symbol>
+    <symbol id="i-soil" viewBox="0 0 24 24"><path d="M3 19h18M5 15h14M7 11h10"/><path d="M12 11V5"/><path d="M12 8c0-3 2-5 5-5 0 3-2 5-5 5Z"/><path d="M12 9c0-2-2-4-5-4 0 3 2 4 5 4Z"/></symbol>
+    <symbol id="i-satellite" viewBox="0 0 24 24"><path d="m13 7 4 4"/><path d="m14 4 6 6"/><path d="m3 21 6-6"/><path d="m5 17 2 2"/><path d="m10 5 2-2 9 9-2 2z"/><path d="m7 13 4 4"/><path d="m3 11 4-4"/><path d="m17 21 4-4"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></symbol>
+    <symbol id="i-cloud-rain" viewBox="0 0 24 24"><path d="M20 16.2A4.5 4.5 0 0 0 18.5 8h-1.3A7 7 0 0 0 4 9.5 4 4 0 0 0 4 17h1"/><path d="m8 19-1 2m6-2-1 2m6-2-1 2"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 3 1.9 5.8L20 11l-6.1 2.2L12 19l-1.9-5.8L4 11l6.1-2.2L12 3Z"/><path d="m19 14 1 2.5 2.5 1-2.5.9L19 21l-.9-2.6-2.6-.9 2.6-1L19 14Z"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 11v5m0-8h.01"/></symbol>
+    <symbol id="i-water" viewBox="0 0 24 24"><path d="M12 22a7 7 0 0 0 7-7c0-4-7-13-7-13S5 11 5 15a7 7 0 0 0 7 7Z"/><path d="M9 16a3 3 0 0 0 3 3"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 3h7v7"/><path d="M10 14 21 3"/><path d="M21 14v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h6"/></symbol>
+  </svg>
+
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#overview" aria-label="FieldShift ana sayfa">
+        <span class="brand-mark"><svg class="icon"><use href="#i-leaf"/></svg></span>
+        <span class="brand-name">field<span>shift</span></span>
+      </a>
+      <div class="workspace-label" data-i18n="workspace">FARM WORKSPACE</div>
+      <nav class="primary-nav" aria-label="Main navigation" data-aria-i18n="mainNavigation">
+        <a class="nav-link active" href="#overview" data-page="overview"><svg class="icon"><use href="#i-grid"/></svg><span data-i18n="navOverview">Genel bakış</span></a>
+        <a class="nav-link" href="#planner" data-page="planner"><svg class="icon"><use href="#i-rotate"/></svg><span data-i18n="navPlanner">Rotasyon planlayıcı</span><span class="nav-badge">03</span></a>
+        <a class="nav-link" href="#soil" data-page="soil"><svg class="icon"><use href="#i-soil"/></svg><span data-i18n="navSoil">Toprak profili</span></a>
+        <a class="nav-link" href="#data" data-page="data"><svg class="icon"><use href="#i-satellite"/></svg><span data-i18n="navData">Veri ve yöntem</span></a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-quote">
+          <div class="quote-icon"><svg class="icon"><use href="#i-spark"/></svg></div>
+          <p data-i18n="quote">Her sezon küçük bir seçim. Nesiller boyu yaşayan bir toprak.</p>
+          <span data-i18n="quoteSource">DAYANIKLI TARIM, BİRLİKTE.</span>
+        </div>
+        <button class="farm-switcher" id="farm-switcher" type="button" aria-label="Farm location" data-aria-i18n="farmLocationAria">
+          <span class="farm-avatar"><svg class="icon"><use href="#i-pin"/></svg></span>
+          <span class="farm-info"><strong id="sidebar-location">Konya, Türkiye</strong><small data-i18n="farmLocation">Çalışma alanı</small></span>
+          <span class="farm-more">···</span>
+        </button>
+      </div>
+    </aside>
+
+    <div class="main-shell">
+      <header class="topbar">
+        <div class="breadcrumb"><span data-i18n="workspace">FARM WORKSPACE</span><span class="breadcrumb-divider">/</span><strong id="page-title" data-i18n="navOverview">Genel bakış</strong></div>
+        <div class="topbar-actions">
+          <div class="data-status" id="data-status" role="status"><span class="status-dot"></span><span id="status-label" data-i18n="statusDemo">Örnek iklim verisi</span></div>
+          <button class="icon-button language-button" id="language-button" type="button" aria-label="Switch language">EN</button>
+          <button class="avatar-button" id="profile-shortcut" type="button" aria-label="Open farm profile" data-aria-i18n="openFarmProfile">D</button>
+        </div>
+      </header>
+
+      <main>
+        <section class="page-section active" id="page-overview" aria-labelledby="welcome-title">
+          <div class="welcome-row">
+            <div>
+              <p class="eyebrow"><span class="eyebrow-line"></span><span data-i18n="greeting">FARM CLIMATE BRIEFING</span><span class="date-pill" id="today-date"></span></p>
+              <h1 id="welcome-title"><span data-i18n="welcomeLine1">Toprağınız değişiyor.</span><br><span class="heading-muted" data-i18n="welcomeLine2">Rotanız uyum sağlayabilir.</span></h1>
+              <p class="welcome-copy" data-i18n="welcomeCopy">NASA iklim gözlemlerini yerel toprak bilginizle birleştirin. Tarlanız için mevsim mevsim daha dayanıklı rotasyonları keşfedin.</p>
+              <div class="welcome-actions">
+                <a class="button button-dark" href="#planner"><span data-i18n="exploreStrategies">Rotasyonları keşfet</span><svg class="icon"><use href="#i-arrow"/></svg></a>
+                <button class="button button-quiet" id="refresh-data" type="button"><svg class="icon"><use href="#i-satellite"/></svg><span data-i18n="refreshData">NASA verisini yenile</span></button>
+              </div>
+            </div>
+            <div class="hero-illustration" aria-hidden="true">
+              <div class="hero-orbit orbit-one"></div><div class="hero-orbit orbit-two"></div>
+              <div class="hero-sun"></div><div class="hero-earth">
+                <svg viewBox="0 0 250 210" role="presentation">
+                  <path d="M3 150c38-10 71-15 108-10 47 7 89-10 139-22v92H0z" fill="#9eb76b"/>
+                  <path d="M0 166c46-9 77-11 119-5 42 6 81-9 131-21v25c-50 13-90 28-139 21-40-6-67-2-111 7Z" fill="#7f9d56"/>
+                  <path d="M0 189c36-8 74-13 111-8 48 7 88-10 139-23" fill="none" stroke="#e6d4ad" stroke-width="2" opacity=".8"/>
+                  <path d="M0 202c42-10 75-14 113-8 44 6 90-9 137-23" fill="none" stroke="#e6d4ad" stroke-width="2" opacity=".65"/>
+                  <path d="M158 135c-4-30 6-52 23-68 5 17 3 34-4 45 12-18 25-26 39-29-4 17-17 31-37 40 25-8 43-7 57 1-19 14-47 19-78 11Z" fill="#e1edc8"/>
+                  <path d="M178 138c10-20 23-33 42-46" fill="none" stroke="#acbf83" stroke-width="2"/>
+                  <path d="M0 150c49-9 78-14 117-8" fill="none" stroke="#f5ebd7" stroke-width="2" opacity=".65"/>
+                </svg>
+              </div>
+              <div class="satellite"><svg class="icon"><use href="#i-satellite"/></svg></div>
+              <span class="hero-illustration-caption"><span class="pulse-dot"></span><span data-i18n="earthObservations">EARTH OBSERVATIONS, LOCAL ACTION</span></span>
+            </div>
+          </div>
+
+          <div class="location-strip">
+            <div class="location-icon"><svg class="icon"><use href="#i-pin"/></svg></div>
+            <div class="location-text"><strong id="farm-title">Konya, Türkiye</strong><span id="coordinate-label">37.87° N, 32.48° E</span></div>
+            <div class="location-divider"></div>
+            <div class="location-details"><span class="mini-label" data-i18n="locationLabel">TARLA KONUMU</span><span data-i18n="locationDescription">İklim profili seçili koordinata göre oluşturulur.</span></div>
+            <button class="text-button" id="edit-location" type="button"><span data-i18n="changeLocation">Konumu değiştir</span><svg class="icon"><use href="#i-arrow"/></svg></button>
+          </div>
+
+          <div class="section-heading">
+            <div><p class="eyebrow" data-i18n="localSnapshot">LOCAL SNAPSHOT</p><h2 data-i18n="weatherHeading">Tarlanızın iklim nabzı</h2></div>
+            <span class="period-note"><svg class="icon"><use href="#i-clock"/></svg><span data-i18n="periodNote">Aylık iklim özeti · son 10 tam yıl</span></span>
+          </div>
+
+          <div class="metrics-grid">
+            <article class="metric-card metric-rain">
+              <div class="metric-topline"><span data-i18n="rainfallMetric">YILLIK YAĞIŞ ORTALAMASI</span><span class="metric-icon"><svg class="icon"><use href="#i-cloud-rain"/></svg></span></div>
+              <div class="metric-value"><strong id="rainfall-value">—</strong><span>mm</span></div>
+              <div class="metric-foot"><span class="metric-symbol rain-symbol"></span><span id="rainfall-note" data-i18n="dataLoading">Konum profili yükleniyor</span></div>
+            </article>
+            <article class="metric-card metric-heat">
+              <div class="metric-topline"><span data-i18n="temperatureMetric">YILLIK ORTALAMA SICAKLIK</span><span class="metric-icon"><svg class="icon"><use href="#i-sun"/></svg></span></div>
+              <div class="metric-value"><strong id="temperature-value">—</strong><span>°C</span></div>
+              <div class="metric-foot"><span class="metric-symbol heat-symbol"></span><span id="temperature-note" data-i18n="dataLoading">Konum profili yükleniyor</span></div>
+            </article>
+            <article class="metric-card metric-dry">
+              <div class="metric-topline"><span data-i18n="dryMetric">KURU DÖNEM GÖSTERGESİ</span><span class="metric-icon"><svg class="icon"><use href="#i-water"/></svg></span></div>
+              <div class="metric-value"><strong id="dry-value">—</strong><span data-i18n="monthsSuffix">ay</span></div>
+              <div class="metric-foot"><span class="metric-symbol dry-symbol"></span><span id="dry-note" data-i18n="dataLoading">Konum profili yükleniyor</span></div>
+            </article>
+          </div>
+
+          <div class="dashboard-grid">
+            <article class="panel map-panel">
+              <div class="panel-header map-panel-header">
+                <div><p class="eyebrow" data-i18n="farmLocationEyebrow">FARM LOCATION</p><h3 data-i18n="fieldContext">Tarlanızın çevresel bağlamı</h3></div>
+                <div class="map-controls">
+                  <div class="map-view-switch" id="map-view-switch" role="group" aria-label="Map view" data-aria-i18n="mapViewAria">
+                    <button class="map-view-button active" id="world-view-button" type="button" aria-pressed="true" aria-label="Schematic map" data-aria-i18n="schematicViewAria"><svg class="icon"><use href="#i-grid"/></svg><span data-i18n="schematicView">Map</span></button>
+                    <button class="map-view-button" id="satellite-view-button" type="button" aria-pressed="false" aria-label="Satellite imagery" data-aria-i18n="satelliteViewAria"><svg class="icon"><use href="#i-satellite"/></svg><span data-i18n="satelliteView">Satellite</span></button>
+                  </div>
+                  <span class="map-badge"><span class="status-dot status-dot-green"></span><span data-i18n="clickMap">Haritada seçin</span></span>
+                </div>
+              </div>
+              <div class="map-wrap" id="map-wrap">
+                <svg class="world-map" id="world-map" viewBox="0 0 800 340" role="img" aria-label="Tarlayı konumlandırmak için tıklanabilir dünya haritası">
+                  <defs>
+                    <pattern id="grid-lines" width="80" height="57" patternUnits="userSpaceOnUse"><path d="M80 0H0V57" fill="none" stroke="#a8b8a0" stroke-width=".65" opacity=".48"/></pattern>
+                    <pattern id="field-lines" width="17" height="17" patternUnits="userSpaceOnUse" patternTransform="rotate(-28)"><path d="M0 0v17" stroke="#a6b27e" stroke-width="1" opacity=".47"/></pattern>
+                    <filter id="pin-shadow" x="-60%" y="-50%" width="220%" height="220%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#173a30" flood-opacity=".28"/></filter>
+                  </defs>
+                  <rect width="800" height="340" fill="#eef1e8"/>
+                  <rect width="800" height="340" fill="url(#grid-lines)"/>
+                  <g class="continents" id="map-land"></g>
+                  <g id="map-pin" filter="url(#pin-shadow)"><circle class="pin-halo" r="16"/><circle class="pin-dot" r="6"/><path class="pin-tail" d="M-4 5 0 13 4 5"/></g>
+                  <g class="map-labels" aria-hidden="true"><text x="400" y="174">ATLANTIC OCEAN</text><text x="442" y="273">INDIAN OCEAN</text><text x="132" y="195">PACIFIC OCEAN</text></g>
+                </svg>
+                <div class="map-zoom" aria-hidden="true"><span>+</span><span>−</span></div>
+                <div class="map-legend"><span class="legend-dot"></span><span id="map-place-name">Konya · çalışma alanı</span></div>
+              </div>
+              <div class="map-wrap satellite-map" id="satellite-map" role="img" aria-label="NASA MODIS Terra true-color satellite imagery" hidden>
+                <div class="satellite-tiles" id="satellite-tiles"></div>
+                <div class="satellite-marker" id="satellite-marker" aria-hidden="true"><span></span></div>
+                <div class="map-legend"><span class="legend-dot"></span><span id="satellite-location-name">Konya, Türkiye</span></div>
+              </div>
+              <div class="satellite-attribution" id="satellite-attribution" hidden>
+                <span class="satellite-status-dot" aria-hidden="true"></span><span id="satellite-status" role="status" aria-live="polite"></span>
+                <a href="https://nasa-gibs.github.io/gibs-api-docs/" target="_blank" rel="noopener noreferrer">NASA GIBS <svg class="icon"><use href="#i-external"/></svg></a>
+              </div>
+              <div class="map-footer"><span><svg class="icon"><use href="#i-info"/></svg><span id="map-guidance">Dünya görünümü şematiktir; haritaya tıklayarak koordinat seçin.</span></span><button class="underlined-button" id="coordinates-button" type="button" data-i18n="enterCoordinates">Koordinat gir</button></div>
+            </article>
+
+            <article class="panel climate-panel">
+              <div class="panel-header climate-header">
+                <div><p class="eyebrow" data-i18n="climatePattern">CLIMATE PATTERN</p><h3 data-i18n="seasonalRainfall">Mevsimsel yağış örüntüsü</h3></div>
+                <span class="chart-units">mm</span>
+              </div>
+              <div class="chart-area" id="rain-chart" role="img" aria-label="Aylara göre ortalama yağış grafiği"></div>
+              <div class="chart-legend"><span class="legend-dot"></span><span data-i18n="averageRain">Ortalama aylık yağış</span><span class="chart-period" id="chart-period">2015 — 2024</span></div>
+              <div class="insight-callout"><span class="insight-icon"><svg class="icon"><use href="#i-spark"/></svg></span><p id="climate-insight">İklim özeti hazırlanıyor…</p></div>
+            </article>
+          </div>
+
+          <div class="bottom-cta">
+            <div class="cta-icon"><svg class="icon"><use href="#i-rotate"/></svg></div>
+            <div><strong data-i18n="ctaTitle">Bir sonraki sezonu niyetle planlayın.</strong><p data-i18n="ctaCopy">Önceliklerinize uygun rotasyonları karşılaştırın; son kararı siz verin.</p></div>
+            <a href="#planner" class="button button-light"><span data-i18n="buildRotation">Rotasyon oluştur</span><svg class="icon"><use href="#i-arrow"/></svg></a>
+          </div>
+          <p class="page-footnote" data-i18n="methodFootnote">İklim göstergeleri bölgesel ölçekte bilgi sunar; parsel ölçümü veya verim tahmini değildir.</p>
+        </section>
+
+        <section class="page-section" id="page-planner" aria-labelledby="planner-title" hidden>
+          <div class="page-intro"><p class="eyebrow"><span class="eyebrow-line"></span><span data-i18n="plannerEyebrow">EXPLORE, DON'T PREDICT</span></p><h1 id="planner-title" data-i18n="plannerTitle">Rotasyon planlayıcı</h1><p class="page-description" data-i18n="plannerDescription">İklim koşullarınız ve önceliklerinize göre üç farklı yaklaşımı karşılaştırın. Öneriler başlangıç noktasıdır; yerel deneyiminiz yol gösterir.</p></div>
+          <div class="planner-toolbar panel">
+            <div class="toolbar-location"><span class="toolbar-icon"><svg class="icon"><use href="#i-pin"/></svg></span><span><small data-i18n="planningFor">PLANLAMA KONUMU</small><strong id="planner-location">Konya, Türkiye</strong></span></div>
+            <span class="toolbar-divider"></span>
+            <div class="season-control"><label for="planning-season" data-i18n="planningHorizon">PLANLAMA UFUKU</label><select id="planning-season"><option value="3" data-i18n="threeSeasons">3 sezon</option><option value="4" data-i18n="fourSeasons">4 sezon</option><option value="5" data-i18n="fiveSeasons">5 sezon</option></select></div>
+            <button id="export-plan" class="button button-outline" type="button"><svg class="icon"><use href="#i-download"/></svg><span data-i18n="exportPlan">Planı dışa aktar</span></button>
+          </div>
+          <div class="priority-section">
+            <div class="section-heading compact-heading"><div><p class="eyebrow" data-i18n="yourPriorities">YOUR PRIORITIES</p><h2 data-i18n="weightPriorities">Sizin için önemli olanlar</h2></div><p class="weight-note" data-i18n="priorityHint">Ağırlıkları değiştirin; senaryolar yeniden sıralansın.</p></div>
+            <div class="priorities panel">
+              <label class="priority-control"><span class="priority-label"><span class="priority-dot priority-water"></span><span data-i18n="waterPriority">Su tasarrufu</span></span><input type="range" min="0" max="100" value="70" id="water-weight"><span class="weight-value" id="water-weight-value">70%</span></label>
+              <label class="priority-control"><span class="priority-label"><span class="priority-dot priority-soil"></span><span data-i18n="soilPriority">Toprak sağlığı</span></span><input type="range" min="0" max="100" value="80" id="soil-weight"><span class="weight-value" id="soil-weight-value">80%</span></label>
+              <label class="priority-control"><span class="priority-label"><span class="priority-dot priority-income"></span><span data-i18n="stabilityPriority">Gelir istikrarı</span></span><input type="range" min="0" max="100" value="50" id="income-weight"><span class="weight-value" id="income-weight-value">50%</span></label>
+            </div>
+          </div>
+          <div class="scenario-head"><div class="section-heading compact-heading"><div><p class="eyebrow" data-i18n="rotationScenarios">ROTATION SCENARIOS</p><h2 data-i18n="compareStrategies">Yaklaşımları karşılaştırın</h2></div></div><span class="ranking-label" id="ranking-label"><svg class="icon"><use href="#i-spark"/></svg><span data-i18n="weightedForYou">Önceliklerinize göre sıralandı</span></span></div>
+          <div class="scenario-grid" id="scenario-grid"></div>
+          <div class="planner-explainer"><span class="explainer-icon"><svg class="icon"><use href="#i-info"/></svg></span><p data-i18n="plannerDisclaimer"><strong>Bir verim tahmini değildir.</strong> Senaryo puanları, seçtiğiniz önceliklere ve ürünlerin genel niteliklerine göre oluşturulmuş sezgisel karşılaştırmalardır. Yerel agronomist görüşü ve toprak analizi önerilerin yerini alamaz.</p></div>
+          <div class="next-steps panel"><div><span class="next-step-index">01</span><strong data-i18n="nextStepSoil">Toprak profilinizi tamamlayın</strong><span data-i18n="nextStepSoilCopy">Senaryolara kendi gözlemlerinizi ekleyin.</span></div><a href="#soil" class="text-button"><span data-i18n="editProfile">Profili düzenle</span><svg class="icon"><use href="#i-arrow"/></svg></a></div>
+        </section>
+
+        <section class="page-section" id="page-soil" aria-labelledby="soil-title" hidden>
+          <div class="page-intro"><p class="eyebrow"><span class="eyebrow-line"></span><span data-i18n="yourField">YOUR FIELD, YOUR KNOWLEDGE</span></p><h1 id="soil-title" data-i18n="soilTitle">Toprağınızı tanıyın</h1><p class="page-description" data-i18n="soilDescription">Laboratuvar analizi yerine geçmez. Bildiklerinizi ekleyerek planlama senaryolarına yerel bağlam katın.</p></div>
+          <div class="soil-layout">
+            <article class="panel soil-form-panel">
+              <div class="panel-header soil-panel-heading"><div><p class="eyebrow" data-i18n="fieldProfile">FIELD PROFILE</p><h3 data-i18n="whatYouKnow">Tarlanız hakkında bildikleriniz</h3></div><span class="saved-state" id="save-status"><svg class="icon"><use href="#i-check"/></svg><span data-i18n="autoSaved">Otomatik kaydedilir</span></span></div>
+              <form id="soil-form">
+                <div class="form-field"><label for="soil-texture" data-i18n="soilTexture">Toprak dokusu</label><select id="soil-texture"><option value="unknown" data-i18n="textureUnknown">Henüz bilmiyorum</option><option value="sandy" data-i18n="textureSandy">Kumlu</option><option value="loamy" data-i18n="textureLoamy">Tınlı</option><option value="clay" data-i18n="textureClay">Killi</option><option value="silty" data-i18n="textureSilty">Siltli</option></select><small data-i18n="soilTextureHelp">Yakınınızdaki analiz veya tarımsal danışmanlık bilgilerine bakabilirsiniz.</small></div>
+                <div class="form-field"><label for="organic-matter" data-i18n="organicMatter">Organik madde gözlemi</label><select id="organic-matter"><option value="unknown" data-i18n="matterUnknown">Henüz ölçülmedi</option><option value="low" data-i18n="matterLow">Düşük — toprak yorulmuş görünüyor</option><option value="medium" data-i18n="matterMedium">Orta — iyileştirme alanı var</option><option value="high" data-i18n="matterHigh">Yüksek — koyu, canlı üst toprak</option></select><small data-i18n="matterHelp">Görsel gözlem yaklaşık bir göstergedir; laboratuvar ölçümü değildir.</small></div>
+                <div class="form-field"><label for="irrigation" data-i18n="irrigationAccess">Sulama erişimi</label><select id="irrigation"><option value="none" data-i18n="noIrrigation">Sulama yok / kuru tarım</option><option value="limited" data-i18n="limitedIrrigation">Sınırlı sulama</option><option value="reliable" data-i18n="reliableIrrigation">Düzenli sulama</option></select><small data-i18n="irrigationHelp">Sulama durumu, ürün tercihini ve su önceliğini etkiler.</small></div>
+                <div class="form-field"><label for="current-crop" data-i18n="currentCrop">Son ekilen ürün</label><select id="current-crop"><option value="cereal" data-i18n="cropCereal">Tahıl (buğday, arpa vb.)</option><option value="legume" data-i18n="cropLegume">Baklagil (nohut, mercimek vb.)</option><option value="oilseed" data-i18n="cropOilseed">Yağlı tohum (ayçiçeği vb.)</option><option value="other" data-i18n="cropOther">Diğer / bilinmiyor</option></select></div>
+                <div class="form-field"><label for="farmer-note" data-i18n="fieldNotes">Tarlanız için notlar <span class="optional" data-i18n="optional">— isteğe bağlı</span></label><textarea id="farmer-note" rows="3" maxlength="240" data-i18n-placeholder="notesPlaceholder" placeholder="Örneğin: İlkbaharda geç don görülüyor, kuzey parselde erozyon var…"></textarea><small data-i18n="notesPrivacy">Notlar yalnızca bu tarayıcıda saklanır.</small></div>
+              </form>
+            </article>
+            <aside class="soil-aside">
+              <article class="soil-care-card"><span class="care-illustration"><svg viewBox="0 0 80 80" aria-hidden="true"><path d="M40 68V35" stroke="#dce8be" stroke-width="3"/><path d="M40 45C18 45 12 31 12 19c18-1 28 8 28 26Z" fill="#9fbb74"/><path d="M41 37c0-20 12-28 29-28 0 17-9 28-29 28Z" fill="#c6d89d"/><path d="M8 69h64" stroke="#8f6e4f" stroke-width="3" stroke-linecap="round"/><path d="M14 76h52" stroke="#6b503d" stroke-width="3" stroke-linecap="round"/><path d="M23 67 27 60m29 7 4-8" stroke="#b48b60" stroke-width="2" stroke-linecap="round"/></svg></span><p class="eyebrow" data-i18n="livingSystems">LIVING SYSTEMS</p><h3 data-i18n="soilCareTitle">Toprak, yaşayan bir ortak.</h3><p data-i18n="soilCareCopy">Baklagiller, örtü bitkileri ve farklı kök yapıları toprağın döngüsüne katkı sunabilir. Etki; iklim, toprak ve yönetimle değişir.</p></article>
+              <article class="panel soil-note"><span class="note-icon"><svg class="icon"><use href="#i-info"/></svg></span><div><strong data-i18n="profileUseTitle">Bu profil nasıl kullanılır?</strong><p data-i18n="profileUseCopy">Seçimleriniz, rotasyon senaryolarının niteliklerini karşılaştırmaya yardımcı olur. Profil, NASA gözlemlerine veya laboratuvar analizine dönüştürülmez.</p></div></article>
+              <a class="button button-dark soil-cta" href="#planner"><span data-i18n="viewScenarios">Senaryoları gör</span><svg class="icon"><use href="#i-arrow"/></svg></a>
+            </aside>
+          </div>
+        </section>
+
+        <section class="page-section" id="page-data" aria-labelledby="data-title" hidden>
+          <div class="page-intro"><p class="eyebrow"><span class="eyebrow-line"></span><span data-i18n="openEarthData">OPEN EARTH DATA</span></p><h1 id="data-title" data-i18n="dataTitle">Veri, yöntem ve sınırlar</h1><p class="page-description" data-i18n="dataDescription">Güvenilir karar desteği, ne bildiğini ve ne bilmediğini açıkça söyler. FieldShift bu ayrımı görünür kılar.</p></div>
+          <div class="data-feature panel"><div class="data-feature-icon"><svg class="icon"><use href="#i-satellite"/></svg></div><div><p class="eyebrow" data-i18n="primarySource">PRIMARY DATA SOURCE</p><h2>NASA POWER</h2><p data-i18n="powerDescription">NASA Langley POWER API, seçilen koordinat için tarımsal meteoroloji parametrelerinin aylık tarihsel özetlerini sağlar. Bu uygulama sıcaklık ve düzeltilmiş yağış verilerini doğrudan NASA API'sinden ister.</p><div class="source-tags"><span>T2M · 2 m air temperature</span><span>PRECTOTCORR · corrected precipitation</span><span>AG · agriculture community</span></div><a class="source-link" href="https://power.larc.nasa.gov/" target="_blank" rel="noopener noreferrer">NASA POWER <svg class="icon"><use href="#i-external"/></svg></a></div></div>
+          <div class="data-feature panel satellite-data-feature"><div class="data-feature-icon"><svg class="icon"><use href="#i-satellite"/></svg></div><div><p class="eyebrow" data-i18n="satelliteSource">LIVE SATELLITE IMAGERY</p><h2>NASA MODIS Terra</h2><p data-i18n="modisDescription">NASA GIBS üzerinden seçili harita alanı için MODIS Terra True Color görüntü kutucukları yüklenir. Görüntüler görsel bağlam sunar; bitki sağlığı veya tarla sınırı analizi değildir ve rotasyon puanlarına girdi oluşturmaz.</p><div class="source-tags"><span>MODIS Terra · True Color</span><span data-i18n="dailySatelliteTiles">Günlük görüntü kutucukları</span><span>NASA GIBS · WMTS</span></div><a class="source-link" href="https://nasa-gibs.github.io/gibs-api-docs/" target="_blank" rel="noopener noreferrer">NASA GIBS <svg class="icon"><use href="#i-external"/></svg></a></div></div>
+          <div class="section-heading data-heading"><div><p class="eyebrow" data-i18n="methodAndBoundaries">METHOD & BOUNDARIES</p><h2 data-i18n="whatThisMeans">Bu, kararınız için ne anlama gelir?</h2></div></div>
+          <div class="method-grid">
+            <article class="panel method-card"><span class="method-index">01</span><h3 data-i18n="regionalCoverage">Bölgesel iklim, parsel ölçümü değil</h3><p data-i18n="regionalCopy">NASA POWER ızgara tabanlı iklim verisi sağlar. Mikroiklimi, tarladaki sensörleri veya yerel yağışı kusursuz biçimde temsil etmez.</p></article>
+            <article class="panel method-card"><span class="method-index">02</span><h3 data-i18n="historicalNotForecast">Tarihsel bağlam, gelecek tahmini değil</h3><p data-i18n="historicalCopy">Aylık geçmiş veriler iklim örüntülerini özetler. Gelecek sezon hava tahmini, iklim projeksiyonu veya ürün verimi öngörüsü sunulmaz.</p></article>
+            <article class="panel method-card"><span class="method-index">03</span><h3 data-i18n="transparentScores">Puanlar sezgiseldir</h3><p data-i18n="scoreCopy">Rotasyon karşılaştırmaları genel ürün niteliklerini ve öncelik ağırlıklarını bir araya getirir; doğrulanmış agronomik model veya uzman tavsiyesi değildir.</p></article>
+            <article class="panel method-card"><span class="method-index">04</span><h3 data-i18n="satelliteLimitsTitle">Uydu görüntüsü, ölçüm değildir</h3><p data-i18n="satelliteLimitsCopy">MODIS True Color yalnızca görsel bağlam sağlar; bulut içerebilir ve ürün sağlığı, toprak nemi veya tarla sınırı ölçmez. Rotasyon puanlarında kullanılmaz.</p></article>
+          </div>
+          <div class="data-sources-panel panel"><div><p class="eyebrow" data-i18n="complementaryDatasets">COMPLEMENTARY NASA DATA</p><h3 data-i18n="moreDataTitle">Genişleyebilecek Dünya gözlemi kaynakları</h3><p data-i18n="moreDataCopy">Aşağıdaki kaynaklar bu prototipte canlı olarak bağlanmamıştır.</p></div><div class="source-list">
+              <a href="https://smap.jpl.nasa.gov/data/" target="_blank" rel="noopener noreferrer"><span class="source-list-mark">S</span><span><strong>SMAP</strong><small data-i18n="smapNote">Uydu tabanlı toprak nemi gözlemleri · bağlantı planlanıyor</small></span><svg class="icon"><use href="#i-external"/></svg></a>
+              <a href="https://gpm.nasa.gov/data" target="_blank" rel="noopener noreferrer"><span class="source-list-mark">G</span><span><strong>GPM</strong><small data-i18n="gpmNote">Küresel yağış ölçümleri · bağlantı planlanıyor</small></span><svg class="icon"><use href="#i-external"/></svg></a>
+              <a href="https://landsat.gsfc.nasa.gov/" target="_blank" rel="noopener noreferrer"><span class="source-list-mark">L</span><span><strong>Landsat</strong><small data-i18n="landsatNote">Arazi ve bitki gözlemleri · bağlantı planlanıyor</small></span><svg class="icon"><use href="#i-external"/></svg></a>
+            </div></div>
+          <p class="page-footnote" data-i18n="sourceFootnote">Kaynaklar yeni pencerede açılır. NASA adı kullanımı NASA'nın bu uygulamayı onayladığı anlamına gelmez.</p>
+        </section>
+      </main>
+      <footer class="app-footer"><span>FIELDSHIFT <span class="footer-divider">·</span> <span data-i18n="footerCredit">ÇİFTÇİ BİLGİSİ + NASA DÜNYA GÖZLEMLERİ</span></span><a href="#data"><span data-i18n="footerMethods">Veri yöntemleri</span><svg class="icon"><use href="#i-arrow"/></svg></a></footer>
+    </div>
+  </div>
+
+  <dialog class="location-dialog" id="location-dialog" aria-labelledby="location-dialog-title">
+    <form method="dialog" class="dialog-close-row"><button class="dialog-close" aria-label="Close dialog" data-aria-i18n="closeDialog">×</button></form>
+    <span class="dialog-icon"><svg class="icon"><use href="#i-pin"/></svg></span>
+    <p class="eyebrow" data-i18n="farmLocationEyebrow">FARM LOCATION</p><h2 id="location-dialog-title" data-i18n="locationDialogTitle">Tarlanızı bulun</h2>
+    <p class="dialog-copy" data-i18n="locationDialogCopy">Bir yer arayın ya da koordinatları doğrudan girin. Konumunuz cihazınıza kaydedilir.</p>
+    <form id="location-form">
+      <label class="dialog-label" for="place-search" data-i18n="searchPlace">YER ARA</label>
+      <div class="search-input-wrap"><svg class="icon"><use href="#i-search"/></svg><input id="place-search" type="search" autocomplete="off" data-i18n-placeholder="placePlaceholder" placeholder="Örn. Konya, Türkiye"></div>
+      <div class="location-search-result" id="search-result" aria-live="polite"></div>
+      <div class="coordinate-inputs"><label class="form-field"><span data-i18n="latitude">ENLEM</span><input id="latitude-input" type="number" step="any" min="-90" max="90" value="37.87" required></label><label class="form-field"><span data-i18n="longitude">BOYLAM</span><input id="longitude-input" type="number" step="any" min="-180" max="180" value="32.48" required></label></div>
+      <label class="dialog-label location-name-label" for="location-name" data-i18n="farmName">ÇİFTLİK / KONUM ADI</label><input id="location-name" class="text-input" maxlength="60" data-i18n-placeholder="farmNamePlaceholder" placeholder="Konya, Türkiye">
+      <button class="button button-dark dialog-submit" type="submit"><span data-i18n="saveLocation">Konumu uygula</span><svg class="icon"><use href="#i-arrow"/></svg></button>
+    </form>
+    <p class="location-privacy"><span data-i18n="privacyNote">Yer araması OpenStreetMap Nominatim ile yapılır. Koordinatlarınız iklim verisi için NASA POWER'a; uydu görünümü seçildiğinde harita kutucukları için NASA GIBS'e gönderilir.</span> <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">© OpenStreetMap contributors</a></p>
+  </dialog>
+  <div class="toast-message" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
